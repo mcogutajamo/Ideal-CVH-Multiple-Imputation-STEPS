@@ -34,15 +34,17 @@ data$maritalstatus <- as.numeric(data$maritalstatus)
 data$education <- as.numeric(data$education)
 data$occupation <- as.numeric(data$occupation)
 data$occupation2 <- as.numeric(data$occupation2)
-data$wealth_quint <- as.numeric(data$wealth_quint)
-data$wealth_quint2 <- as.numeric(data$wealth_quint2)
 data$fruitvegintake <- as.numeric(data$fruitvegintake)
 data$smoking_status <- as.numeric(data$smoking_status)
 data$alcohol <- as.numeric(data$alcohol)
 data$cvd <- as.numeric(data$cvd)
 
 
+columns <- colnames(data)
+new_column_names <- paste ("c", 1:34, sep= "_")
+data1 <- data 
 
+names(data1)[1:34] <- new_column_names
 
 # Imputation --------------------------------------------------------------
 
@@ -51,22 +53,18 @@ library(mice)
 
 # Checking pattern of missingness for the 2 groups
 
-plot1 <- md.pattern(data) # helps to look at the pattern of the missing data for intervention group
+plot1 <- md.pattern(data1) # helps to look at the pattern of the missing data for intervention group
 plot1
-
-ggsave(file = "plot1.pdf", plot = plot1)
 
 # Impute the missing values, starting with 20 imputed data sets. 
 impute_int_20 <- mice(data , m=20, seed = 1234)
 summary(impute_int_20) 
 plot2 <- plot(impute_int_20) ###Looks like there could be correlation, impute 60 more
 plot2
-ggsave(file = "plot2.pdf", plot = plot2, width = 20, height = 5)
 
 impute_int_80 <- mice.mids(impute_int_20, maxit=60, seed = 1234, print=F)
 plot3 <- plot(impute_int_80)
 plot3
-ggsave(file = "plot3.pdf", plot = plot3, width = 20, height = 5)
 
 
 
@@ -100,8 +98,6 @@ data$maritalstatus <- as.factor(data$maritalstatus)
 data$education <- as.factor(data$education)
 data$occupation <- as.factor(data$occupation)
 data$occupation2 <- as.factor(data$occupation2)
-data$wealth_quint <- as.factor(data$wealth_quint)
-data$wealth_quint2 <- as.factor(data$wealth_quint2)
 data$fruitvegintake <- as.factor(data$fruitvegintake)
 data$smoking_status <- as.factor(data$smoking_status)
 data$alcohol <- as.factor(data$alcohol)
